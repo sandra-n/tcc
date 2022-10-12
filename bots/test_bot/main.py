@@ -45,6 +45,11 @@ def searches_mentions(api, keywords, since_id):
             original_tweet_id = tweet.in_reply_to_status_id
             original_tweet = api.get_status(original_tweet_id)
             logger.info("tweet: %s", original_tweet.text)
+
+            while original_tweet.in_reply_to_status_id is not None:
+                original_tweet_id = original_tweet.in_reply_to_status_id
+                original_tweet = api.get_status(original_tweet_id)
+                logger.info("tweet: %s", original_tweet.text)
     
             api.update_status(status="Some answer", in_reply_to_status_id=tweet.id,  auto_populate_reply_metadata=True)
     return new_since_id
@@ -59,7 +64,7 @@ def main():
     bot_id = api.verify_credentials().id
     since_id = 1
     while True:
-        since_id = searches_mentions(api, ["help", "support", "calling"], since_id, bot_id)
+        since_id = searches_mentions(api, ["help", "support", "calling"], since_id)
         logger.info("Waiting...")
         time.sleep(60)
     #tweet_message(api, 'test')
