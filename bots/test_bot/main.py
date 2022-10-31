@@ -31,74 +31,85 @@ def tweet_message(api, message, image_path=None):
     print('tweeted successfully :D')
 
 # Searches mention from tweets and responds using cursor
+# it gets only one previous tweet from the caller. Makes it easier for testing.
 def searches_mentions(api, keywords, since_id):
     logger.info("Retrieving mentions")
     new_since_id = since_id
     for tweet in tweepy.Cursor(api.mentions_timeline, since_id=since_id).items():
         new_since_id = max(tweet.id, new_since_id)
+        print(tweet.id)
         if tweet.in_reply_to_status_id is None:
             continue
         if any(keyword in tweet.text.lower() for keyword in keywords):
             logger.info('Answering to %s', tweet.user.name)
-
             try:
                 original_tweet_id = tweet.in_reply_to_status_id
                 original_tweet = api.get_status(original_tweet_id)
                 logger.info("tweet: %s", original_tweet.text)
-
-                while original_tweet.in_reply_to_status_id is not None:
-                    original_tweet_id = original_tweet.in_reply_to_status_id
-                    original_tweet = api.get_status(original_tweet_id)
-                    logger.info("tweet: %s", original_tweet.text)
-    
-                api.update_status(status="Some answer", in_reply_to_status_id=tweet.id,  auto_populate_reply_metadata=True)
+                
+                response = "got info of tweet: " + original_tweet.text
+                api.update_status(status=response, in_reply_to_status_id=tweet.id,  auto_populate_reply_metadata=True)
 
             except tweepy.errors.NotFound as e:
-                    logging.error("User or tweet deleted".format(e))
+                    logging.error("User or tweet deleted: {}".format(e))
 
             except tweepy.errors.TweepyException as e:  
                 logging.error("Tweepy error occured:{}".format(e))
-            
 
     return new_since_id
 
+
+# given a client and a tweet, this function iterates over the thread to get all tweets form it
+def searches_tweets_trough_conversation(client, original_tweet):
+    responses_from_conversation = []
+    for response in tweepy.Paginator(client.search_recent_tweets,query = 'conversation_id:' + str(original_tweet.conversation_id)):
+        for tweet in response.data:
+            responses_from_conversation.append(tweet.text)
+    return responses_from_conversation
+
 # Searches mention from tweets using paginator
+# the use of paginator and client object makes it possible to use conversation_id field
+# Therefore, this function can retrieve all the tweets form a thread
 def searches_mentions_with_paginator(api, keywords, since_id, bot_id):
     client = tweepy.Client(twitter_keys.bearer_token)
     logger.info("Retrieving mentions")
-    new_since_id = since_id
-    for tweet in tweepy.Paginator(client.get_users_mentions, id=bot_id, since_id=since_id):
-        print(tweet)
-        for info in tweet:
-            print(info)
-        if tweet.in_reply_to_status_id is None:
-            continue
-        if any(keyword.lower() in tweet.text.lower() for keyword in keywords):
-            logger.info('Answering to %s', tweet.user.name)
+    for response in tweepy.Paginator(client.get_users_mentions, id=bot_id, since_id=since_id, tweet_fields=["conversation_id"]):
+        tweets = response.data
+        try:
+            for tweet in tweets:
+                since_id = max(since_id, tweet.id)
+                if any(keyword.lower() in tweet.text.lower() for keyword in keywords):
+                    responses_from_conversations = searches_tweets_trough_conversation(client, tweet)
+                    responses_from_conversations.append(client.get_tweet(tweet.conversation_id).data.text)
+                    logger.info("Replying to tweet: %s", tweet.text)
+                    logger.info(responses_from_conversations)
+        
+                api.update_status(status="Some answer", in_reply_to_status_id=tweet.id,  auto_populate_reply_metadata=True)
+                responses_from_conversations = [] #so that next tweet doesnt have previous tweets to judge whether or not it has racist comments
 
-            original_tweet_id = tweet.in_reply_to_status_id
-            original_tweet = api.get_status(original_tweet_id)
-            logger.info("Replying to tweet: %s", original_tweet.text)
-    
-            api.update_status(status="Some answer", in_reply_to_status_id=tweet.id,  auto_populate_reply_metadata=True)
-            break
-    return new_since_id
+        except TypeError as e:
+                logging.error("Tweets were not found, or some error ocurred while searching for them: {}".format(e))
+        
+        except tweepy.errors.NotFound as e:
+                logging.error("User or tweet deleted: {}".format(e))
 
-class IDPrinter(tweepy.StreamingClient):
+        except tweepy.errors.TweepyException as e:  
+                logging.error("Tweepy error occured:{}".format(e))
 
-    def on_tweet(self, tweet):
-        print(tweet.id)
+    return since_id
 
 def main():
     api = create_api()
     bot_id = api.verify_credentials().id
     since_id = 1
     while True:
-        since_id = searches_mentions(api, ["help", "support", "calling"], since_id)
+        since_id = searches_mentions_with_paginator(api, 
+                                    ["help", "support", "calling"], 
+                                    since_id,
+                                    bot_id)
         logger.info("Waiting...")
         time.sleep(60)
     #tweet_message(api, 'test')
-    #printer = IDPrinter(twitter_keys.bearer_token)
     #printer.sample()
 
 if __name__ == '__main__':
