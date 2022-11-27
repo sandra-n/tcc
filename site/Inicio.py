@@ -14,21 +14,48 @@ st.write('O racismo ainda é um tema muito relevante atualmente, presente não a
 'Vale destacar que o trabalho possui um enfoque ao racismo contra povos e descendentes da Ásia, uma vez que pouco se encontrou trabalhos com essa temática. Ademais, dado a sensibilidade do tema, achou-se sensato concentrar-se numa etnia apenas.')
 
 st.subheader('O modelo')
+
+modelo_selecionado = st.selectbox(label='Escolha o tipo de modelo a ser utilizado', options=('Bayes', 'LSTM'))
+
 frase_analisada = st.text_input('Digite uma sentença para o modelo verificar se é racista ou não:',
                                 help='A sentença deve ser escrita em inglês')
-if st.button('Verificar'):
-    model = load_bayes_model()
-    if model:
-        prediction = bayes_predict(frase_analisada, model)
-        if prediction < 0.5:
-            st.error('A frase analisada foi classificada como racista')
-        if prediction > 0.5:
-            st.success('A frase analisada foi classificada como não racista')
-    else:
-        st.error("Tente novamente mais tarde")
 
-st.write('O modelo avalia de forma binária, se é ou não racista.')
-st.write('Não indica se a frase apresenta uma tendência racista')
+
+
+if modelo_selecionado == 'Bayes':
+    if st.button('Verificar'):
+        model = load_bayes_model()
+        if model:
+            prediction = bayes_predict(frase_analisada, model)
+            if prediction < 0.5:
+                st.error('A frase analisada foi classificada como racista')
+            if prediction >= 0.5:
+                st.success('A frase analisada foi classificada como não racista')
+        else:
+            st.error("Tente novamente mais tarde")
+    st.write('O modelo avalia de forma binária, se é ou não racista.')
+    st.write('Não indica se a frase apresenta uma tendência racista.')
+
+elif modelo_selecionado == 'LSTM':
+    if st.button('Verificar'):
+        model = load_lstm_model()
+        if model:
+            frase_processada = pre_process_tweet(frase_analisada)
+            prediction = model(frase_processada)
+            prediction = ((prediction[: ,0])[0]).item()
+            if prediction < 0.5:
+                st.error('A frase analisada tende a ser racista, com score de: ' + str(prediction))
+            if prediction >= 0.5:
+                st.success('A frase analisada tende a ser não racista, com score de: ' + str(prediction))
+        else:
+            st.error("Tente novamente mais tarde")
+    st.write('O modelo apresenta um score com valores entre 0 e 1.')
+    st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
+
+else:
+    st.error('Nenhum modelo foi especificado')
+    
+
 st.write('')
 st.write('Se sentir alguma dificuldade em lembrar-se de algum termo em inglês, use o tradutor abaixo!')
 
