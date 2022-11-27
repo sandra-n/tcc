@@ -56,7 +56,7 @@ def load_lstm_model():
     hidden_dim = 50 
     try:
         model = TweetsLSTM(no_layers,hidden_dim,input_dim,drop_prob=0.3)
-        model.load_state_dict(torch.load("model/model_loss_00001-0.6532321288786104_acc-0.6283185840707964"))
+        model.load_state_dict(torch.load("model/model_lstm_big", map_location=torch.device('cpu')))
         model.eval()
         return model
     except Exception as e:

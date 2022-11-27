@@ -26,6 +26,7 @@ if modelo_selecionado == 'Bayes':
     if st.button('Verificar'):
         model = load_bayes_model()
         if model:
+            #with st.spinner(text='Processando os dados'):
             prediction = bayes_predict(frase_analisada, model)
             if prediction < 0.5:
                 st.error('A frase analisada foi classificada como racista')
