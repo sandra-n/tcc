@@ -1,8 +1,6 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 import translators as tss
-import random
+from lstm_model_functions import load_lstm_model, pre_process_tweet
 
 st.title('Racismo Amarelo')
 st.header('Uma análise sobre discursos de ódio contemporâneos através de aprendizagem de máquina')
@@ -15,24 +13,31 @@ st.write('O racismo ainda é um tema muito relevante atualmente, presente não a
 'Vale destacar que o trabalho possui um enfoque ao racismo contra povos e descendentes da Ásia, uma vez que pouco se encontrou trabalhos com essa temática. Ademais, dado a sensibilidade do tema, achou-se sensato concentrar-se numa etnia apenas.')
 
 st.subheader('O modelo')
-st.text_input('Digite uma sentença para o modelo verificar se é racista ou não:', 
-            help='A sentença deve ser escrita em inglês')
+frase_analisada = st.text_input('Digite uma sentença para o modelo verificar se é racista ou não:',
+                                help='A sentença deve ser escrita em inglês')
 if st.button('Verificar'):
-    random.seed()
-    valor = random.random()
-    if(valor > 0.5):
-        st.success(valor)
+    model = load_lstm_model()
+    if model:
+        frase_processada = pre_process_tweet(frase_analisada)
+        prediction = model(frase_processada)
+        prediction = ((prediction[: ,0])[0]).item()
+        if prediction < 0.5:
+            st.error('A frase analisada tende a ser racista, com score de: ' + str(prediction))
+        if prediction > 0.5:
+            st.success('A frase analisada tende a ser não racista, com score de: ' + str(prediction))
     else:
-        st.error(valor)
+        st.error("Tente novamente mais tarde")
 
 st.write('O modelo apresenta um score com valores entre 0 e 1.')
 st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
 st.write('')
 st.write('Se sentir alguma dificuldade em lembrar-se de algum termo em inglês, use o tradutor abaixo!')
 
-input_text = st.text_input(label='texto a ser traduzido', label_visibility='hidden')
-#Translates user input and creates text to speech audio
- 
+input_text = st.text_input(label='coloque um texto para traduzir', placeholder='Coloque um texto para traduzir', label_visibility='hidden')
+
 if st.button('Traduzir'):    
-    result = tss.google(input_text, from_language='pt', to_language='en')
-    st.success(result)
+    if input_text != "":
+        result = tss.google(input_text, from_language='pt', to_language='en')
+        st.success(result)
+    else:
+        st.error("Nenhum texto foi colocado para ser traduzido")
