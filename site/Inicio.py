@@ -1,6 +1,7 @@
 import streamlit as st
 import translators as tss
 from lstm_model_functions import load_lstm_model, pre_process_tweet
+from bayes_model_functions import load_bayes_model, bayes_predict
 
 st.title('Racismo Amarelo')
 st.header('Uma análise sobre discursos de ódio contemporâneos através de aprendizagem de máquina')
@@ -16,20 +17,18 @@ st.subheader('O modelo')
 frase_analisada = st.text_input('Digite uma sentença para o modelo verificar se é racista ou não:',
                                 help='A sentença deve ser escrita em inglês')
 if st.button('Verificar'):
-    model = load_lstm_model()
+    model = load_bayes_model()
     if model:
-        frase_processada = pre_process_tweet(frase_analisada)
-        prediction = model(frase_processada)
-        prediction = ((prediction[: ,0])[0]).item()
+        prediction = bayes_predict(frase_analisada, model)
         if prediction < 0.5:
-            st.error('A frase analisada tende a ser racista, com score de: ' + str(prediction))
+            st.error('A frase analisada foi classificada como racista')
         if prediction > 0.5:
-            st.success('A frase analisada tende a ser não racista, com score de: ' + str(prediction))
+            st.success('A frase analisada foi classificada como não racista')
     else:
         st.error("Tente novamente mais tarde")
 
-st.write('O modelo apresenta um score com valores entre 0 e 1.')
-st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
+st.write('O modelo avalia de forma binária, se é ou não racista.')
+st.write('Não indica se a frase apresenta uma tendência racista')
 st.write('')
 st.write('Se sentir alguma dificuldade em lembrar-se de algum termo em inglês, use o tradutor abaixo!')
 
