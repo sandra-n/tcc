@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import json
 import numpy as np
-from treat_tweets import remove_stopwords, lower_tweet, splitPunctuation, removeLink, separateEmoji, add_space, is_emoji, removeMention
+from treat_tweets import remove_stopwords, lower_tweet, splitPunctuation, removeLink, separateEmoji, removeMention
   
 
 class TweetsLSTM(nn.Module):
@@ -56,7 +56,7 @@ def load_lstm_model():
     hidden_dim = 50 
     try:
         model = TweetsLSTM(no_layers,hidden_dim,input_dim,drop_prob=0.3)
-        model.load_state_dict(torch.load("model/model_lstm_big", map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load("model/lstm/model_lstm_big", map_location=torch.device('cpu')))
         model.eval()
         return model
     except Exception as e:
@@ -70,7 +70,7 @@ def tweets_tok(tweet):
      
     return np.array(tweet_tok)
 
-def pre_process_tweet(tweet):
+def lstm_pre_process_tweet(tweet):
     tweet_treated = lower_tweet(remove_stopwords(removeMention(removeLink(splitPunctuation(separateEmoji(tweet))))))
     tweet_tok = tweets_tok(tweet_treated)
     tweet_proc = torch.from_numpy(tweet_tok).type(torch.float32)

@@ -14,6 +14,8 @@ def download_stopwords():
     nltk.download('omw-1.4')
     nltk.download('averaged_perceptron_tagger')
     stopwords_set = set(stopwords.words('english'))
+    stopwords_set.add('\u200d')
+    stopwords_set.add(' ')
     return stopwords_set
 
 regex = re.compile("(http://t\.co.{12})|(https://t\.co.{11})")

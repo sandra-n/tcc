@@ -1,7 +1,10 @@
 import streamlit as st
 import translators as tss
-from lstm_model_functions import load_lstm_model, pre_process_tweet
+from lstm_model_functions import load_lstm_model, lstm_pre_process_tweet
 from bayes_model_functions import load_bayes_model, bayes_predict
+from cnn_model_functions import load_cnn_model, cnn_pre_process_tweet
+import numpy as np
+import tensorflow as tf
 
 st.title('Racismo Amarelo')
 st.header('Uma análise sobre discursos de ódio contemporâneos através de aprendizagem de máquina')
@@ -15,7 +18,7 @@ st.write('O racismo ainda é um tema muito relevante atualmente, presente não a
 
 st.subheader('O modelo')
 
-modelo_selecionado = st.selectbox(label='Escolha o tipo de modelo a ser utilizado', options=('Bayes', 'LSTM'))
+modelo_selecionado = st.selectbox(label='Escolha o tipo de modelo a ser utilizado', options=('Bayes', 'LSTM', 'CNN'))
 
 frase_analisada = st.text_input('Digite uma sentença para o modelo verificar se é racista ou não:',
                                 help='A sentença deve ser escrita em inglês')
@@ -41,8 +44,9 @@ elif modelo_selecionado == 'LSTM':
     if st.button('Verificar'):
         model = load_lstm_model()
         if model:
-            frase_processada = pre_process_tweet(frase_analisada)
+            frase_processada = lstm_pre_process_tweet(frase_analisada)
             prediction = model(frase_processada)
+            st.info(prediction)
             prediction = ((prediction[: ,0])[0]).item()
             if prediction < 0.5:
                 st.error('A frase analisada tende a ser racista, com score de: ' + str(prediction))
@@ -53,9 +57,25 @@ elif modelo_selecionado == 'LSTM':
     st.write('O modelo apresenta um score com valores entre 0 e 1.')
     st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
 
+elif modelo_selecionado == 'CNN':
+    if st.button('Verificar'):
+        print("1")
+        model = load_cnn_model()
+        if model:
+            frase_processada = cnn_pre_process_tweet(frase_analisada)
+            prediction = model(frase_processada)[0][0]
+            if prediction < 0.5:
+                st.error('A frase analisada tende a ser racista, com score de: ' + str(float(prediction)))
+            if prediction >= 0.5:
+                st.success('A frase analisada tende a ser não racista, com score de: ' + str(float(prediction)))
+        else:
+            st.error("Tente novamente mais tarde")
+    st.write('O modelo apresenta um score com valores entre 0 e 1.')
+    st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
+
 else:
     st.error('Nenhum modelo foi especificado')
-    
+  
 
 st.write('')
 st.write('Se sentir alguma dificuldade em lembrar-se de algum termo em inglês, use o tradutor abaixo!')
