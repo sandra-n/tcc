@@ -64,9 +64,7 @@ class TweetsLSTM(nn.Module):
 
 def load_lstm_emb_model():
     no_layers = 2
-    embedding_dim = 64
     input_dim = 1
-    output_dim = 3
     hidden_dim = 50 #256
     try:
         model = TweetsLSTM(no_layers,hidden_dim,input_dim,drop_prob=0.3)

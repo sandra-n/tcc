@@ -5,6 +5,7 @@ from treat_tweets import remove_stopwords, lower_tweet, splitPunctuation, remove
 from joblib import load
 import pandas as pd
 import numpy as np
+
 def create_model():
     with tf.device("cpu:0"):
         model = Sequential()

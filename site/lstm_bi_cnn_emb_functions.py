@@ -67,7 +67,7 @@ def load_lstm_bi_cnn_emb_model():
     hidden_dim = 50 
     try:
         model = TweetsLSTM(no_layers,hidden_dim,input_dim,drop_prob=0.3).to(device)
-        model.load_state_dict(torch.load("model/lstm_bi_cnn/model_lstm_bi_cnn", map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load("model/lstm_bi_cnn_emb/model_lstm_bi_cnn_emb", map_location=torch.device('cpu')))
         model.eval()
         return model
     except Exception as e:
