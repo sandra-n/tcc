@@ -1,7 +1,6 @@
 import streamlit as st
 import torch
 import torch.nn as nn
-import json
 import numpy as np
 from treat_tweets import remove_stopwords, lower_tweet, splitPunctuation, removeLink, separateEmoji, removeMention
 import pickle
