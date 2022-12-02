@@ -1,9 +1,10 @@
 import streamlit as st
 import translators as tss
-from lstm_model_functions import load_lstm_model, lstm_pre_process_tweet
-from bayes_model_functions import load_bayes_model, bayes_predict
-from cnn_model_functions import load_cnn_model, cnn_pre_process_tweet
+from lstm_functions import load_lstm_model, lstm_pre_process_tweet
+from bayes_functions import load_bayes_model, bayes_predict
+from cnn_functions import load_cnn_model, cnn_pre_process_tweet
 from lstm_emb_functions import load_lstm_emb_model, lstm_emb_pre_process_tweet
+from cnn_emb_functions import load_cnn_emb_model, cnn_emb_pre_process_tweet
 import numpy as np
 import tensorflow as tf
 
@@ -22,7 +23,8 @@ st.subheader('O modelo')
 modelo_selecionado = st.selectbox(label='Escolha o tipo de modelo a ser utilizado', options=('Bayes',
                                                                                              'LSTM',
                                                                                              'LSTM Embedded',
-                                                                                             'CNN'))
+                                                                                             'CNN',
+                                                                                             'CNN Embedded'))
 
 frase_analisada = st.text_input('Digite uma sentença para o modelo verificar se é racista ou não:',
                                 help='A sentença deve ser escrita em inglês')
@@ -78,11 +80,25 @@ elif modelo_selecionado == 'LSTM Embedded':
 
 elif modelo_selecionado == 'CNN':
     if st.button('Verificar'):
-        print("1")
         model = load_cnn_model()
         if model:
             frase_processada = cnn_pre_process_tweet(frase_analisada)
             prediction = model(frase_processada)[0][0]
+            if prediction < 0.5:
+                st.error('A frase analisada tende a ser racista, com score de: ' + str(float(prediction)))
+            if prediction >= 0.5:
+                st.success('A frase analisada tende a ser não racista, com score de: ' + str(float(prediction)))
+        else:
+            st.error("Tente novamente mais tarde")
+    st.write('O modelo apresenta um score com valores entre 0 e 1.')
+    st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
+
+elif modelo_selecionado == 'CNN Embedded':
+    if st.button('Verificar'):
+        model = load_cnn_emb_model()
+        if model:
+            frase_processada = cnn_emb_pre_process_tweet(frase_analisada)
+            prediction = model(frase_processada)
             if prediction < 0.5:
                 st.error('A frase analisada tende a ser racista, com score de: ' + str(float(prediction)))
             if prediction >= 0.5:
