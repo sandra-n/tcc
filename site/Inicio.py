@@ -6,6 +6,7 @@ from cnn_functions import load_cnn_model, cnn_pre_process_tweet
 from lstm_emb_functions import load_lstm_emb_model, lstm_emb_pre_process_tweet
 from cnn_emb_functions import load_cnn_emb_model, cnn_emb_pre_process_tweet
 from lstm_cnn_functions import load_lstm_cnn_model, lstm_cnn_pre_process_tweet
+from lstm_bi_cnn_functions import load_lstm_bi_cnn_model, lstm_bi_cnn_pre_process_tweet
 import numpy as np
 import tensorflow as tf
 
@@ -26,7 +27,8 @@ modelo_selecionado = st.selectbox(label='Escolha o tipo de modelo a ser utilizad
                                                                                              'LSTM Embedded',
                                                                                              'CNN',
                                                                                              'CNN Embedded', 
-                                                                                             'LSTM + CNN'))
+                                                                                             'LSTM + CNN',
+                                                                                             'LSTM Bidirecional + CNN'))
 
 frase_analisada = st.text_input('Digite uma sentença para o modelo verificar se é racista ou não:',
                                 help='A sentença deve ser escrita em inglês')
@@ -125,6 +127,24 @@ elif modelo_selecionado == 'LSTM + CNN':
             st.error("Tente novamente mais tarde")
     st.write('O modelo apresenta um score com valores entre 0 e 1.')
     st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
+
+elif modelo_selecionado == 'LSTM Bidirecional + CNN':
+    if st.button('Verificar'):
+        model = load_lstm_bi_cnn_model()
+        if model:
+            frase_processada = lstm_bi_cnn_pre_process_tweet(frase_analisada)
+            st.info(frase_processada)
+            prediction = model(frase_processada)
+            prediction = ((prediction[: ,0])[0]).item()
+            if prediction < 0.5:
+                st.error('A frase analisada tende a ser racista, com score de: ' + str(prediction))
+            if prediction >= 0.5:
+                st.success('A frase analisada tende a ser não racista, com score de: ' + str(prediction))
+        else:
+            st.error("Tente novamente mais tarde")
+    st.write('O modelo apresenta um score com valores entre 0 e 1.')
+    st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
+
 
 else:
     st.error('Nenhum modelo foi especificado')

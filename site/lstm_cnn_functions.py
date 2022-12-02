@@ -79,14 +79,6 @@ def load_lstm_cnn_model():
     except Exception as e:
         st.error("não foi possível encontrar um modelo para utilizar")
 
-def tweets_tok(tweet):
-    file = open ('model/vocab_to_int.json', "r")
-    vocab_to_int = json.load(file)
-
-    tweet_tok = [[vocab_to_int[w]] for w in tweet.split() if w in vocab_to_int]
-     
-    return np.array(tweet_tok)
-
 def lstm_cnn_pre_process_tweet(tweet):
     max_length = 280
     tweet_treated = lower_tweet(remove_stopwords(removeMention(removeLink(splitPunctuation(separateEmoji(tweet))))))
