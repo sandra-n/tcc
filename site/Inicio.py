@@ -1,5 +1,7 @@
 import streamlit as st
 import translators as tss
+import random
+from PIL import Image
 from lstm_functions import load_lstm_model, lstm_pre_process_tweet
 from bayes_functions import load_bayes_model, bayes_predict
 from cnn_functions import load_cnn_model, cnn_pre_process_tweet
@@ -10,6 +12,16 @@ from lstm_bi_cnn_functions import load_lstm_bi_cnn_model, lstm_bi_cnn_pre_proces
 from lstm_bi_cnn_emb_functions import load_lstm_bi_cnn_emb_model, lstm_bi_cnn_emb_pre_process_tweet
 from lstm_cnn_emb_functions import load_lstm_cnn_emb_model, lstm_cnn_emb_pre_process_tweet
 from treat_tweets import treating_tweet
+
+
+with open('.streamlit/style.css') as f:
+    st.markdown(
+        f'<style>{f.read()}</style>',
+        unsafe_allow_html=True,
+    )
+
+image = Image.open('images/site-image.jpeg')
+st.image(image, caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 
 st.title('Racismo Amarelo')
 st.header('Uma análise sobre discursos de ódio contemporâneos através de aprendizagem de máquina')
