@@ -3,6 +3,17 @@ import pandas as pd
 import numpy as np
 import translators as tss
 import random
+from PIL import Image
+
+
+with open('.streamlit/style.css') as f:
+    st.markdown(
+        f'<style>{f.read()}</style>',
+        unsafe_allow_html=True,
+    )
+
+image = Image.open('images/site-image.jpeg')
+st.image(image, caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 
 st.title('Racismo Amarelo')
 st.header('Uma análise sobre discursos de ódio contemporâneos através de aprendizagem de máquina')

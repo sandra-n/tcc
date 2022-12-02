@@ -1,5 +1,12 @@
 import streamlit as st
 
+
+with open('.streamlit/style.css') as f:
+    st.markdown(
+        f'<style>{f.read()}</style>',
+        unsafe_allow_html=True,
+    )
+    
 st.title('Vídeo demosntrativo')
 st.write('O vídeo apresentado a seguir contém a explicação contextual do projeto assim como uma demonstração prática dos modelos implementados e do bot desenvolvido:')
 
