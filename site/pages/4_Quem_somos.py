@@ -1,6 +1,7 @@
 import streamlit as st
 from PIL import Image, ImageDraw
 import numpy as np
+import streamlit.components.v1 as components
 
 
 def cropped_image(photo):
@@ -58,3 +59,12 @@ with col2:
 
 
 st.header('Twitter bot')
+st.write('Acompanhe as postagens do nosso bot [@AreYou_Racist](https://twitter.com/AreYou_Racist) no Twitter:')
+
+components.html(
+    """
+        <a class="twitter-timeline" data-width="400" data-height="600" href="https://twitter.com/Anitta?ref_src=twsrc%5Etfw">Tweets by Anitta</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    """,
+    height=500,
+)
+# Página do Twitter: https://twitter.com/AreYou_Racist
