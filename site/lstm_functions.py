@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import json
 import numpy as np
-from treat_tweets import remove_stopwords, lower_tweet, splitPunctuation, removeLink, separateEmoji, removeMention
+from treat_tweets import treating_tweet
   
 
 class TweetsLSTM(nn.Module):
@@ -70,9 +70,16 @@ def tweets_tok(tweet):
      
     return np.array(tweet_tok)
 
-def lstm_pre_process_tweet(tweet):
-    tweet_treated = lower_tweet(remove_stopwords(removeMention(removeLink(splitPunctuation(separateEmoji(tweet))))))
+def padding(dataset_tok, max_len):
+    for i in range(len(dataset_tok)):
+        if len(dataset_tok[i]) < max_len:
+            for z in range(max_len - len(dataset_tok[i])):
+                dataset_tok[i] = [[0]] + dataset_tok[i]
+    return np.array(dataset_tok)
+
+def lstm_pre_process_tweet(tweet_treated):
     tweet_tok = tweets_tok(tweet_treated)
-    tweet_proc = torch.from_numpy(tweet_tok).type(torch.float32)
+    tweet_padded = padding(tweet_tok, 280)
+    tweet_proc = torch.from_numpy(tweet_padded).type(torch.float32)
     tweet_proc = tweet_proc.unsqueeze(0)
     return tweet_proc

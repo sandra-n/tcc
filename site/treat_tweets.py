@@ -49,12 +49,15 @@ def splitPunctuation(tweet):
         .replace("(", " ( ").replace(")", " ) ")
     return tweet
 
-def remove_stopwords(tweet):
+def removeStopwords(tweet):
     words = tweet.split()
     stopwords_set = download_stopwords()
     words = [word for word in words if not word in stopwords_set]
     newTweet = ' '.join(words)
     return newTweet
 
-def lower_tweet(tweet):
+def lowerTweet(tweet):
     return tweet.lower()
+
+def treating_tweet(tweet):
+    return removeStopwords(lowerTweet(splitPunctuation(removeLink(removeMention(separateEmoji(tweet))))))

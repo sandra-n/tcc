@@ -9,6 +9,7 @@ from lstm_cnn_functions import load_lstm_cnn_model, lstm_cnn_pre_process_tweet
 from lstm_bi_cnn_functions import load_lstm_bi_cnn_model, lstm_bi_cnn_pre_process_tweet
 from lstm_bi_cnn_emb_functions import load_lstm_bi_cnn_emb_model, lstm_bi_cnn_emb_pre_process_tweet
 from lstm_cnn_emb_functions import load_lstm_cnn_emb_model, lstm_cnn_emb_pre_process_tweet
+from treat_tweets import treating_tweet
 
 st.title('Racismo Amarelo')
 st.header('Uma análise sobre discursos de ódio contemporâneos através de aprendizagem de máquina')
@@ -24,17 +25,17 @@ st.subheader('O modelo')
 
 modelo_selecionado = st.selectbox(label='Escolha o tipo de modelo a ser utilizado', options=('Bayes',
                                                                                              'LSTM',
-                                                                                             'LSTM Embedded',
+                                                                                             'LSTM com Embedding',
                                                                                              'CNN',
-                                                                                             'CNN Embedded', 
+                                                                                             'CNN com Embedding', 
                                                                                              'LSTM + CNN',
-                                                                                             'LSTM + CNN Embedded',
+                                                                                             'LSTM + CNN com Embedding',
                                                                                              'LSTM Bidirecional + CNN', 
-                                                                                             'LSTM Bidirecional + CNN Embedded'))
+                                                                                             'LSTM Bidirecional + CNN com Embedding'))
 
-frase_analisada = st.text_input('Digite uma sentença para o modelo verificar se é racista ou não:',
+frase_input = st.text_input('Digite uma sentença para o modelo verificar se é racista ou não:',
                                 help='A sentença deve ser escrita em inglês')
-
+frase_analisada = treating_tweet(frase_input)
 
 
 if modelo_selecionado == 'Bayes':
@@ -68,7 +69,7 @@ elif modelo_selecionado == 'LSTM':
     st.write('O modelo apresenta um score com valores entre 0 e 1.')
     st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
 
-elif modelo_selecionado == 'LSTM Embedded':
+elif modelo_selecionado == 'LSTM com Embedding':
     if st.button('Verificar'):
         model = load_lstm_emb_model()
         if model:
@@ -99,7 +100,7 @@ elif modelo_selecionado == 'CNN':
     st.write('O modelo apresenta um score com valores entre 0 e 1.')
     st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
 
-elif modelo_selecionado == 'CNN Embedded':
+elif modelo_selecionado == 'CNN com Embedding':
     if st.button('Verificar'):
         model = load_cnn_emb_model()
         if model:
@@ -146,7 +147,7 @@ elif modelo_selecionado == 'LSTM Bidirecional + CNN':
     st.write('O modelo apresenta um score com valores entre 0 e 1.')
     st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
 
-elif modelo_selecionado == 'LSTM Bidirecional + CNN Embedded':
+elif modelo_selecionado == 'LSTM Bidirecional + CNN com Embedding':
     if st.button('Verificar'):
         model = load_lstm_bi_cnn_emb_model()
         if model:
@@ -162,7 +163,7 @@ elif modelo_selecionado == 'LSTM Bidirecional + CNN Embedded':
     st.write('O modelo apresenta um score com valores entre 0 e 1.')
     st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
 
-elif modelo_selecionado == 'LSTM + CNN Embedded':
+elif modelo_selecionado == 'LSTM + CNN com Embedding':
     if st.button('Verificar'):
         model = load_lstm_cnn_emb_model()
         if model:

@@ -4,7 +4,7 @@ import torch.nn as nn
 from joblib import load
 import pandas as pd
 import numpy as np
-from treat_tweets import remove_stopwords, lower_tweet, splitPunctuation, removeLink, separateEmoji, removeMention
+from treat_tweets import treating_tweet
 
 device = torch.device('cpu')
 
@@ -80,8 +80,7 @@ def tweets_tok(tweet):
     tweet_svd = svd.transform(tweet_cntvct)
     return np.array(tweet_svd)
 
-def lstm_bi_cnn_emb_pre_process_tweet(tweet):
-    tweet_treated = lower_tweet(remove_stopwords(removeMention(removeLink(splitPunctuation(separateEmoji(tweet))))))
+def lstm_bi_cnn_emb_pre_process_tweet(tweet_treated):
     tweet_tok = tweets_tok(tweet_treated)
     tweet_proc = torch.from_numpy(np.array(tweet_tok)).type(torch.float32)
     tweet_proc = tweet_proc.unsqueeze(0)

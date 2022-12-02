@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import pandas as pd
 import numpy as np
-from treat_tweets import remove_stopwords, lower_tweet, splitPunctuation, removeLink, separateEmoji, removeMention
+from treat_tweets import treating_tweet
 from joblib import load
 
 device = torch.device('cpu')
@@ -18,9 +18,6 @@ class TweetsLSTM(nn.Module):
         self.no_layers = no_layers
     
         #print(type(self.no_layers), type(self.input_dim), type(self.hidden_dim))
-        
-        # embedding and LSTM layers
-        #self.embedding = nn.Embedding(vocab_size, embedding_dim)
         
         #lstm
         self.lstm_layers = nn.LSTM(input_size=self.input_dim,hidden_size=self.hidden_dim,
@@ -84,8 +81,7 @@ def tweets_tok(tweet):
     #st.info(tweet_svd[0])
     return np.array(tweet_svd)
 
-def lstm_emb_pre_process_tweet(tweet):
-    tweet_treated = lower_tweet(remove_stopwords(removeMention(removeLink(splitPunctuation(separateEmoji(tweet))))))
+def lstm_emb_pre_process_tweet(tweet_treated):
     tweet_tok = tweets_tok(tweet_treated)
     tweet_proc = torch.from_numpy(tweet_tok).type(torch.float32)
     tweet_proc = tweet_proc.unsqueeze(0)

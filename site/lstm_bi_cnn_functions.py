@@ -2,7 +2,7 @@ import streamlit as st
 import torch
 import torch.nn as nn
 import numpy as np
-from treat_tweets import remove_stopwords, lower_tweet, splitPunctuation, removeLink, separateEmoji, removeMention
+from treat_tweets import treating_tweet
 import pickle
 from keras_preprocessing.sequence import pad_sequences
 
@@ -74,9 +74,8 @@ def load_lstm_bi_cnn_model():
         st.error("não foi possível encontrar um modelo para utilizar")
 
 
-def lstm_bi_cnn_pre_process_tweet(tweet):
+def lstm_bi_cnn_pre_process_tweet(tweet_treated):
     max_length = 280
-    tweet_treated = lower_tweet(remove_stopwords(removeMention(removeLink(splitPunctuation(separateEmoji(tweet))))))
     file = open("model/lstm_bi_cnn/tokenizer.pickle",'rb')
     tokenizer = pickle.load(file)
     tweet_tokenized = tokenizer.texts_to_sequences([tweet_treated])
