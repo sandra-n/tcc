@@ -16,7 +16,7 @@ import os
 from pathlib import Path
 
 path = os.path.dirname(__file__)
-path = Path(path)
+path = str(Path(path))
 parent_dir = str(path.parent.absolute())
 
 with open(parent_dir + '/.streamlit/style.css') as f:
