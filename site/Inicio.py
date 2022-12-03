@@ -16,7 +16,7 @@ import os
 from pathlib import Path
 
 path = os.path.dirname(__file__)
-path = str(Path(path))
+path = Path(path)
 parent_dir = str(path.parent.absolute())
 
 with open(parent_dir + '/.streamlit/style.css') as f:
@@ -26,7 +26,7 @@ with open(parent_dir + '/.streamlit/style.css') as f:
     )
 
 
-image = Image.open(path+'/images/site-image.jpeg')
+image = Image.open(str(path)+'/images/site-image.jpeg')
 st.image(image, caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 
 st.title('Racismo Amarelo')
