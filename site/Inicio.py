@@ -26,7 +26,7 @@ with open(parent_dir + '/.streamlit/style.css') as f:
     )
 
 
-image = Image.open('images/site-image.jpeg')
+image = Image.open(path+'images/site-image.jpeg')
 st.image(image, caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 
 st.title('Racismo Amarelo')
