@@ -1,10 +1,8 @@
-import streamlit as st
 from emoji import UNICODE_EMOJI
 import re
 import nltk
 from nltk.corpus import stopwords
 
-@st.cache 
 def download_stopwords():
     nltk.download('stopwords')
     nltk.download('punkt')
