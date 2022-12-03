@@ -7,7 +7,7 @@ with open('.streamlit/style.css') as f:
         unsafe_allow_html=True,
     )
     
-st.title('Vídeo demosntrativo')
+st.title('Vídeo demonstrativo')
 st.write('O vídeo apresentado a seguir contém a explicação contextual do projeto assim como uma demonstração prática dos modelos implementados e do bot desenvolvido:')
 
 video_file = open("video/MyGameList.mp4", "rb")

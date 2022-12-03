@@ -33,7 +33,10 @@ st.subheader("Gabriel Oga Sanefuji")
 (col1, col2) = st.columns([2,1])
 with col1:
     #st.image("stuff in 1")
-    st.write('Estudante do último ano de Engenharia de Computação (cooperativo) Poli-USP')
+    st.write('Estudante do último ano de Engenharia de Computação (cooperativo) Poli-USP. \n'
+            'Membro da equipe de Tênis de Mesa da Poli desde 2018 \n'
+            'Possui um grande interesse na área de Dados, mas tem tido maior experiência em projetos de engenharia de software. \n'
+            'Em seu tempo livre, gosta de ficar em casa, tocar violão e ler mangás.')
 with col2:
     st.image(cropped_image('images/foto-gabriel.jpg'), caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 
@@ -53,9 +56,10 @@ st.subheader("Ricardo Luis de Azevedo da Rocha")
 (col1, col2) = st.columns([2,1])
 with col1:
     #st.image("stuff in 1")
-    st.write('Estudante do último ano de Engenharia de Computação (cooperativo) Poli-USP')
+    st.write('Concluiu o doutorado em Engenharia Elétrica [Sp-Capital] pela Universidade de São Paulo em 2000. Atualmente é Professor Doutor - MS-3 da Universidade de São Paulo. \n'
+    'Atua na área de Engenharia Elétrica, com ênfase em Fundamentos de Computação.')
 with col2:
-    st.image(cropped_image('images/foto-sandrinha.jpeg'), caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
+    st.image(cropped_image('images/professor-ricardo.jpeg'), caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 
 
 st.header('Twitter bot')

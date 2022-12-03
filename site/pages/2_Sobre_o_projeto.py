@@ -9,7 +9,6 @@ with open('.streamlit/style.css') as f:
     )
 
 st.title('Sobre o projeto')
-st.sidebar.markdown("# Da pra adicionar coisas legais aqui")
 
 st.subheader('')
 st.subheader('Objetivo')
@@ -30,7 +29,16 @@ st.write('Foram testados 11 modelos distintos: **Naive Bayes**, **LSTM** (Long-S
 ' Para todos eles, a pipeline seguida foi a mesma: uma vez treinados, validados e testandos os modelos desenvolvidos, eles são salvos para uso externo futuro. Este uso é tanto na própria website do projeto, quanto no bot, que faz requisições a Cloud Functions do Google Cloud Platform.')
 
 st.subheader('Metodologia')
-st.write('Escrever sobre metodologia')
+st.write('A metodologia utilizada para o desenvolvimento do projeto se baseia no ciclo de vida de um projeto de ciência de dados concebida pela Microsoft, o TDSP (Team Data Science Process). Trata-se de um modelo de trabalho bem amplo que apresenta dentro da concepção de um projeto quatro estágios principais: '
+        'entendimento do negócio; coleta e entendimento de dados; modelagem; e deploy. \n\n'
+        'Desse modo, dentro do contexto do projeto em questão, o seguinte fluxograma com a metodologia aplicada foi elaborado:')
+tdsp = Image.open('images/fluxogramametodologia.jpg')
+st.image(tdsp, caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
+st.write('Primeiramente, entendeu-se o problema, no caso o racismo contra populações asiáticas, quais suas peculiaridades e quais os possíveis meios de estudo e abordagem do mesmo. Dentro desse passo, além do estudo de conceitos de Machine Learning e Processamento de Linguagem Natural, o grupo realizou reuniões e conversas com Lucas Lago e David Nemer. '
+        'O primeiro para compreender quais as limitações e características principais de bots e da rede social Twitter.'
+        'Já o segundo é um influente antropólogo, especializado em antropologia da informática, que melhor explicou a problemática do racismo contra povos asiáticos dentro da internet. \n\n'
+        'Em seguida, foram feitas pesquisas e coletas de bases de dados que pudessem auxiliar na criação de modelos em machine learning. Os dados obtidos, então, foram tratados e classificados. Após isso, avaliou-se a qualidade e quantidade daquilo que se coletou. Caso necessário, volta-se ao passo de entendimento do problema, dessa vex com uma melhor copmreensão de limitações em termos de dados. \n\n'
+        'Por fim, foi feita a modeloagem de modelos e avaliados, de acordo com os desempenhos em métricas conhecidas, como: acurácia, recall, F1-score e precisão.')
 
 st.subheader('Conclusão')
 st.write('Escrever sobre conclusão')
