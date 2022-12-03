@@ -5,6 +5,10 @@ from joblib import load
 import pandas as pd
 import numpy as np
 from treat_tweets import treating_tweet
+import os
+from pathlib import Path
+
+path = os.path.dirname(__file__)
 
 device = torch.device('cpu')
 
@@ -67,15 +71,15 @@ def load_lstm_bi_cnn_emb_model():
     hidden_dim = 50 
     try:
         model = TweetsLSTM(no_layers,hidden_dim,input_dim,drop_prob=0.3).to(device)
-        model.load_state_dict(torch.load("model/lstm_bi_cnn_emb/model_lstm_bi_cnn_emb", map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load(path + "/model/lstm_bi_cnn_embedded/model_lstm_bi_cnn_emb", map_location=torch.device('cpu')))
         model.eval()
         return model
     except Exception as e:
         st.error("não foi possível encontrar um modelo para utilizar")
 
 def tweets_tok(tweet):
-    cntvct = load('./model/lstm_bi_cnn_embedded/cntvct.joblib')
-    svd = load('./model/lstm_bi_cnn_embedded/svd.joblib')
+    cntvct = load(path + '/model/lstm_bi_cnn_embedded/cntvct.joblib')
+    svd = load(path + '/model/lstm_bi_cnn_embedded/svd.joblib')
     tweet_cntvct = cntvct.transform(pd.Series(tweet))
     tweet_svd = svd.transform(tweet_cntvct)
     return np.array(tweet_svd)

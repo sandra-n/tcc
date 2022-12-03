@@ -5,6 +5,9 @@ from treat_tweets import treating_tweet
 from joblib import load
 import pandas as pd
 import numpy as np
+import os
+
+path = os.path.dirname(__file__)
 
 def create_model():
     with tf.device("cpu:0"):
@@ -22,12 +25,12 @@ def create_model():
 
 def load_cnn_emb_model():
     model = create_model()
-    model.load_weights("./model/cnn_embedded/cp-0050.ckpt").expect_partial()
+    model.load_weights(path + "/model/cnn_embedded/cp-0050.ckpt").expect_partial()
     return model
 
 def tweets_tok(tweet):
-    cntvct = load('./model/cnn_embedded/cntvct.joblib')
-    svd = load('./model/cnn_embedded/svd.joblib')
+    cntvct = load(path + '/model/cnn_embedded/cntvct.joblib')
+    svd = load(path + '/model/cnn_embedded/svd.joblib')
     tweet_cntvct = cntvct.transform(pd.Series(tweet))
     tweet_svd = svd.transform(tweet_cntvct)
     return np.array(tweet_svd)

@@ -4,6 +4,9 @@ from keras_preprocessing.sequence import pad_sequences
 import tensorflow as tf
 import pickle
 from treat_tweets import treating_tweet
+import os
+
+path = os.path.dirname(__file__)
 
 def create_model(num_words, max_length):
     with tf.device("cpu:0"):
@@ -22,12 +25,12 @@ def load_cnn_model():
     num_words = 5000
     max_length = 280
     model = create_model(num_words, max_length)
-    model.load_weights("model/cnn/cp-0011.ckpt").expect_partial()
+    model.load_weights(path + "/model/cnn/cp-0011.ckpt").expect_partial()
     return model
 
 def cnn_pre_process_tweet(tweet_treated):
     max_length = 280
-    file = open("model/cnn/tokenizer.pickle",'rb')
+    file = open(path + "/model/cnn/tokenizer.pickle",'rb')
     tokenizer = pickle.load(file)
     tweet_tokenized = tokenizer.texts_to_sequences([tweet_treated])
     tweet_padded = pad_sequences(tweet_tokenized, maxlen=max_length, padding='post')

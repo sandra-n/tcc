@@ -4,7 +4,9 @@ import torch.nn as nn
 import json
 import numpy as np
 from treat_tweets import treating_tweet
-  
+import os
+
+path = os.path.dirname(__file__)
 
 class TweetsLSTM(nn.Module):
     def __init__(self,no_layers,hidden_dim,input_dim,drop_prob=0.5):
@@ -56,14 +58,14 @@ def load_lstm_model():
     hidden_dim = 50 
     try:
         model = TweetsLSTM(no_layers,hidden_dim,input_dim,drop_prob=0.3)
-        model.load_state_dict(torch.load("model/lstm/model_lstm_big", map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load(path + "/model/lstm/model_lstm_big", map_location=torch.device('cpu')))
         model.eval()
         return model
     except Exception as e:
         st.error("não foi possível encontrar um modelo para utilizar")
 
 def tweets_tok(tweet):
-    file = open ('model/vocab_to_int.json', "r")
+    file = open (path + '/model/vocab_to_int.json', "r")
     vocab_to_int = json.load(file)
 
     tweet_tok = [[vocab_to_int[w]] for w in tweet.split() if w in vocab_to_int]

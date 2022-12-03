@@ -12,13 +12,19 @@ from lstm_bi_cnn_functions import load_lstm_bi_cnn_model, lstm_bi_cnn_pre_proces
 from lstm_bi_cnn_emb_functions import load_lstm_bi_cnn_emb_model, lstm_bi_cnn_emb_pre_process_tweet
 from lstm_cnn_emb_functions import load_lstm_cnn_emb_model, lstm_cnn_emb_pre_process_tweet
 from treat_tweets import treating_tweet
+import os
+from pathlib import Path
 
+path = os.path.dirname(__file__)
+path = Path(path)
+parent_dir = str(path.parent.absolute())
 
-with open('.streamlit/style.css') as f:
+with open(parent_dir + '/.streamlit/style.css') as f:
     st.markdown(
         f'<style>{f.read()}</style>',
         unsafe_allow_html=True,
     )
+
 
 image = Image.open('images/site-image.jpeg')
 st.image(image, caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")

@@ -1,8 +1,13 @@
 import streamlit as st
 from PIL import Image
+import os
+from pathlib import Path
 
+path = os.path.dirname(__file__)
+path = Path(path)
+parent_dir = str(path.parent.absolute())
 
-with open('.streamlit/style.css') as f:
+with open(parent_dir + '/../.streamlit/style.css') as f:
     st.markdown(
         f'<style>{f.read()}</style>',
         unsafe_allow_html=True,
@@ -21,7 +26,7 @@ st.write('Os dados utilizados para treinamento, validação e teste de modelos d
 ' O Covid Hate consiste num dataset com mais de 200 milhões de tweets coletados durante a pandemia de Covid-19, classificados como "racistas", "antirracistas" e "neutros". Já os dados coletados via API contém dados referentes ao autor e data da postagem, mas sem classificação de racismo.  \n'
 ' Esses tweets foram coletados entre maio e julho de 2022 e, para serem incluídos no dataset do projeto, precisaram ser rotulados. A rotulação foi feita baseada na rotulação manual de uma amostra de todos os tweets seguida da aplicação do modelo BERT pré-treinado. Com ele, os outros tweets puderam ser classificados.  \n\n'
 ' Ao final, a quantidade total de tweets utilizáveis para o estudo foi 1459393. Todos os dados, independentemente da fonte da qual vieram, passaram pelos mesmos processos de limpeza e tratamento, antes de serem inseridos nos modelos.  \n')
-image = Image.open('images/Data flowchart.jpg')
+image = Image.open(parent_dir + '/images/Data flowchart.jpg')
 st.image(image, caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 
 st.write('Foram testados 11 modelos distintos: **Naive Bayes**, **LSTM** (Long-Short Term Memory), **LSTM bidirecional**, **CNN-1D** (Convolutional Neural Network), e combinações de LSTM e CNN, e LSTM bidirecional e CNN.'
@@ -32,7 +37,7 @@ st.subheader('Metodologia')
 st.write('A metodologia utilizada para o desenvolvimento do projeto se baseia no ciclo de vida de um projeto de ciência de dados concebida pela Microsoft, o TDSP (Team Data Science Process). Trata-se de um modelo de trabalho bem amplo que apresenta dentro da concepção de um projeto quatro estágios principais: '
         'entendimento do negócio; coleta e entendimento de dados; modelagem; e deploy. \n\n'
         'Desse modo, dentro do contexto do projeto em questão, o seguinte fluxograma com a metodologia aplicada foi elaborado:')
-tdsp = Image.open('images/fluxogramametodologia.jpg')
+tdsp = Image.open(parent_dir + '/images/fluxogramametodologia.jpg')
 st.image(tdsp, caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 st.write('Primeiramente, entendeu-se o problema, no caso o racismo contra populações asiáticas, quais suas peculiaridades e quais os possíveis meios de estudo e abordagem do mesmo. Dentro desse passo, além do estudo de conceitos de Machine Learning e Processamento de Linguagem Natural, o grupo realizou reuniões e conversas com Lucas Lago e David Nemer. '
         'O primeiro para compreender quais as limitações e características principais de bots e da rede social Twitter.'

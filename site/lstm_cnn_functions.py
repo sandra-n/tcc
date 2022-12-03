@@ -5,6 +5,9 @@ import numpy as np
 from treat_tweets import treating_tweet
 import pickle
 from keras_preprocessing.sequence import pad_sequences
+import os
+
+path = os.path.dirname(__file__)
 
 device = torch.device('cpu')
 
@@ -72,7 +75,7 @@ def load_lstm_cnn_model():
     hidden_dim = 50 
     try:
         model = TweetsLSTM(no_layers,hidden_dim,input_dim,drop_prob=0.3)
-        model.load_state_dict(torch.load("model/lstm_cnn/model_lstm_cnn", map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load(path + "/model/lstm_cnn/model_lstm_cnn", map_location=torch.device('cpu')))
         model.eval()
         return model
     except Exception as e:
@@ -80,7 +83,7 @@ def load_lstm_cnn_model():
 
 def lstm_cnn_pre_process_tweet(tweet_treated):
     max_length = 280
-    file = open("model/cnn/tokenizer.pickle",'rb')
+    file = open(path + "/model/cnn/tokenizer.pickle",'rb')
     tokenizer = pickle.load(file)
     tweet_tokenized = tokenizer.texts_to_sequences([tweet_treated])
     tweet_padded = pad_sequences(tweet_tokenized, maxlen=max_length, padding='post')

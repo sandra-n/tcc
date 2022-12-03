@@ -2,7 +2,12 @@ import streamlit as st
 from PIL import Image, ImageDraw
 import numpy as np
 import streamlit.components.v1 as components
+import os
+from pathlib import Path
 
+path = os.path.dirname(__file__)
+path = Path(path)
+parent_dir = str(path.parent.absolute())
 
 def cropped_image(photo):
     img = Image.open(photo)
@@ -18,7 +23,7 @@ def cropped_image(photo):
     return Image.fromarray(final_img_arr)
 
 
-with open('.streamlit/style.css') as f:
+with open(parent_dir + '/../.streamlit/style.css') as f:
     st.markdown(
         f'<style>{f.read()}</style>',
         unsafe_allow_html=True,
@@ -38,13 +43,13 @@ with col1:
             'Possui um grande interesse na área de Dados, mas tem tido maior experiência em projetos de engenharia de software. \n'
             'Em seu tempo livre, gosta de ficar em casa, tocar violão e ler mangás.')
 with col2:
-    st.image(cropped_image('images/foto-gabriel.jpg'), caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
+    st.image(cropped_image(parent_dir + '/images/foto-gabriel.jpg'), caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 
 
 st.subheader("Sandra Ayumi Nihama")
 (col1, col2) = st.columns([1,2])
 with col1:
-    st.image(cropped_image('images/foto-sandrinha.jpeg'), caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
+    st.image(cropped_image(parent_dir + '/images/foto-sandrinha.jpeg'), caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 with col2:
     st.write('Estudante do último ano de Engenharia de Computação (cooperativo) Poli-USP, com Duplo Diploma da CentraleSupélec, França.  \n'
     'Membro da equipe de Tênis de Mesa da Poli desde 2017, fez parte também do Cursinho da Poli-USP durante a graduação.  \n'
@@ -59,7 +64,7 @@ with col1:
     st.write('Concluiu o doutorado em Engenharia Elétrica [Sp-Capital] pela Universidade de São Paulo em 2000. Atualmente é Professor Doutor - MS-3 da Universidade de São Paulo. \n'
     'Atua na área de Engenharia Elétrica, com ênfase em Fundamentos de Computação.')
 with col2:
-    st.image(cropped_image('images/professor-ricardo.jpeg'), caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
+    st.image(cropped_image(parent_dir + '/images/professor-ricardo.jpeg'), caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 
 
 st.header('Twitter bot')
