@@ -46,4 +46,7 @@ st.write('Primeiramente, entendeu-se o problema, no caso o racismo contra popula
         'Por fim, foi feita a modeloagem de modelos e avaliados, de acordo com os desempenhos em métricas conhecidas, como: acurácia, recall, F1-score e precisão.')
 
 st.subheader('Conclusão')
-st.write('Escrever sobre conclusão')
+st.write('Apesar de possuir oportunidades de melhoria, o projeto apresentou bons resultados, com o desenvolvimento de modelos cuja acurácia atingiu a marca de 94%.'
+        'Não só isso, o trablho permitiu validar a ideia de que é possível construir um modelo capaz de classificar conteúdos textuais na internet como racistas e não racistas.'
+        'O projeto, mesmo sem o uso de tweets específicos de momentos marcantes para a população amarela na atualidade, como os Jogos Olímpicos de 2020 e períodos diversos da pandemia de Covid-19, já mostrou bastante potencial. \n\n'
+        'A possibilidade de educação da população no que diz respeito ao racismo contra amarelos também foi um aprendizado para o grupo: refletir sobre que tipo de mensagem compartilhar, sem ofender pessoas nem desrespeitar normas do Twitter, foi valioso.')
