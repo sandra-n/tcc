@@ -11,6 +11,7 @@ from lstm_cnn_functions import load_lstm_cnn_model, lstm_cnn_pre_process_tweet
 from lstm_bi_cnn_functions import load_lstm_bi_cnn_model, lstm_bi_cnn_pre_process_tweet
 from lstm_bi_cnn_emb_functions import load_lstm_bi_cnn_emb_model, lstm_bi_cnn_emb_pre_process_tweet
 from lstm_cnn_emb_functions import load_lstm_cnn_emb_model, lstm_cnn_emb_pre_process_tweet
+from lstm_bi_emb_functions import load_lstm_bi_emb_model, lstm_bi_emb_pre_process_tweet
 from treat_tweets import treating_tweet
 import os
 from pathlib import Path
@@ -47,6 +48,7 @@ modelo_selecionado = st.selectbox(label='Escolha o tipo de modelo a ser utilizad
                                                                                              'CNN com Embedding', 
                                                                                              'LSTM + CNN',
                                                                                              'LSTM + CNN com Embedding',
+                                                                                             'LSTM Bidirecional com Embedding',
                                                                                              'LSTM Bidirecional + CNN', 
                                                                                              'LSTM Bidirecional + CNN com Embedding'))
 
@@ -153,6 +155,22 @@ elif modelo_selecionado == 'LSTM Bidirecional + CNN':
         model = load_lstm_bi_cnn_model()
         if model:
             frase_processada = lstm_bi_cnn_pre_process_tweet(frase_analisada)
+            prediction = model(frase_processada)
+            prediction = ((prediction[: ,0])[0]).item()
+            if prediction < 0.5:
+                st.error('A frase analisada tende a ser racista, com score de: ' + str(prediction))
+            if prediction >= 0.5:
+                st.success('A frase analisada tende a ser não racista, com score de: ' + str(prediction))
+        else:
+            st.error("Tente novamente mais tarde")
+    st.write('O modelo apresenta um score com valores entre 0 e 1.')
+    st.write('A frase apresenta-se com maior tendência racista conforme o  valor do score se aproxime de 0.')
+
+elif modelo_selecionado == 'LSTM Bidirecional com Embedding':
+    if st.button('Verificar'):
+        model = load_lstm_bi_emb_model()
+        if model:
+            frase_processada = lstm_bi_emb_pre_process_tweet(frase_analisada)
             prediction = model(frase_processada)
             prediction = ((prediction[: ,0])[0]).item()
             if prediction < 0.5:
