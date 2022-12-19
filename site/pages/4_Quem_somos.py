@@ -4,10 +4,27 @@ import numpy as np
 import streamlit.components.v1 as components
 import os
 from pathlib import Path
+import base64
 
 path = os.path.dirname(__file__)
 path = Path(path)
 parent_dir = str(path.parent.absolute())
+
+@st.cache(allow_output_mutation=True)
+def get_base64_of_bin_file(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+@st.cache(allow_output_mutation=True)
+def get_img_with_href(local_img_path, target_url):
+    img_format = os.path.splitext(local_img_path)[-1].replace('.', '')
+    bin_str = get_base64_of_bin_file(local_img_path)
+    html_code = f'''
+        <a href="{target_url}">
+            <img style="width: 5%; height: 5%" src="data:image/{img_format};base64,{bin_str}" />
+        </a>'''
+    return html_code
 
 def cropped_image(photo):
     img = Image.open(photo)
@@ -41,7 +58,9 @@ with col1:
     st.write('Estudante do último ano de Engenharia de Computação (cooperativo) Poli-USP. \n'
             'Membro da equipe de Tênis de Mesa da Poli desde 2018 \n'
             'Possui um grande interesse na área de Dados, mas tem tido maior experiência em projetos de engenharia de software. \n'
-            'Em seu tempo livre, gosta de ficar em casa, tocar violão e ler mangás.')
+            'Em seu tempo livre, gosta de ficar em casa, tocar violão e ler mangás.')        
+    gabriel_link = get_img_with_href(parent_dir + '/images/linkedin_icon.png', 'https://www.linkedin.com/in/gabriel-sanefuji/')
+    st.markdown(gabriel_link, unsafe_allow_html=True)
 with col2:
     st.image(cropped_image(parent_dir + '/images/foto-gabriel.jpg'), caption=None, width=None, use_column_width=True, clamp=False, channels="RGB", output_format="auto")
 
@@ -54,6 +73,9 @@ with col2:
     st.write('Estudante do último ano de Engenharia de Computação (cooperativo) Poli-USP, com Duplo Diploma da CentraleSupélec, França.  \n'
     'Membro da equipe de Tênis de Mesa da Poli desde 2017, fez parte também do Cursinho da Poli-USP durante a graduação.  \n'
     'Além de Dados e Machine Learning, suas maiores paixões são passar tempo com a família e amigos, descobrir músicas novas, desenhar e buscar aprender coisas novas :)')
+    
+    sandra_link = get_img_with_href(parent_dir + '/images/linkedin_icon.png', 'https://www.linkedin.com/in/sandra-ayumi-nihama/')
+    st.markdown(sandra_link, unsafe_allow_html=True)
 
 st.write('\n\n')
 st.header('Professor orientador')
