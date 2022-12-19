@@ -83,7 +83,7 @@ def load_lstm_cnn_model():
 
 def lstm_cnn_pre_process_tweet(tweet_treated):
     max_length = 280
-    file = open(path + "/model/cnn/tokenizer.pickle",'rb')
+    file = open(path + "/model/lstm_cnn/tokenizer.pickle",'rb')
     tokenizer = pickle.load(file)
     tweet_tokenized = tokenizer.texts_to_sequences([tweet_treated])
     tweet_padded = pad_sequences(tweet_tokenized, maxlen=max_length, padding='post')
