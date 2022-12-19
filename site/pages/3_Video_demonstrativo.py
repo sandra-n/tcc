@@ -18,4 +18,4 @@ st.write('O vídeo apresentado a seguir contém a explicação contextual do pro
 # video_file = open(parent_dir + "/video/MyGameList.mp4", "rb")
 # video_bytes = video_file.read()
 # st.video(video_bytes)
-# st.video(data="https://www.youtube.com/watch?v=7jHcszxmKRw", format="video/mp4", start_time=0)
+st.video(data="https://youtu.be/NB0mvtRCdxY", format="video/mp4", start_time=0)
