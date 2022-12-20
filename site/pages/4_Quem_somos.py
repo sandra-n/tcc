@@ -94,7 +94,7 @@ st.write('Acompanhe as postagens do nosso bot [@AreYou_Racist](https://twitter.c
 
 components.html(
     """
-        <a class="twitter-timeline" data-width="400" data-height="600" href="https://twitter.com/AreYou_Racist">Tweets by Anitta</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <a class="twitter-timeline" data-width="400" data-height="600" href="https://twitter.com/AreYou_Racist">Tweets by Are You Racist Project</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     """,
     height=500,
 )
